@@ -1,0 +1,10 @@
+<template name="listChallenges">
+    <div class="jumbotron">
+        {{>addChallenge}}
+        <ul>
+            {{#each challenges}}
+                <li>{{name}}</li>
+            {{/each}}
+        </ul>
+    </div>
+</template>

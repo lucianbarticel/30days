@@ -1,0 +1,12 @@
+<template name="home">
+    <div class="container">
+        <div class="jumbotron">
+            <h2>Ello',</h2>
+            {{>loginButtons}}
+        </div>
+
+        {{#if currentUser}}
+            {{>listChallenges}}
+        {{/if}}
+    </div>
+</template>
