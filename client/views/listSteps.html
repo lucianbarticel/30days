@@ -1,0 +1,22 @@
+<template name="listSteps">
+	<div class="jumbotron">
+		<div class="row">
+			{{>addStep challenge=challenge}}
+		</div>
+		<div class="row">
+			{{#each steps}}
+				<div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control editStep" value="{{body}}">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Action <span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <li><a href="#" class="removeStep">Remove</a></li>
+                                </ul>
+                            </div><!-- /btn-group -->
+                        </div>
+                    </div>
+			{{/each}}
+		</div>
+	</div>
+</template>

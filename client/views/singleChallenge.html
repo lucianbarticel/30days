@@ -1,9 +1,16 @@
 <template name="singleChallenge">
     <div class="container">
         <div class="jumbotron">
-            <h2>Ello',</h2>
+        {{#linkTo route="home"}}GoHome{{/linkTo}}
+            <h2>{{name}}</h2>
             {{>loginButtons}}
+
         </div>
-        {{name}}
+    	{{#if currentUser}}
+            {{_id}}
+    		{{>listSteps steps=steps challenge=_id }}            
+    	{{else}}
+    		You have to log in in order to see the steps
+    	{{/if}}
     </div>
 </template>
