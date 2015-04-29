@@ -1,10 +1,26 @@
 <template name="listChallenges">
     <div class="jumbotron">
-        {{>addChallenge}}
-        <ul>
-            {{#each challenges}}
-                <li>{{name}}</li>
-            {{/each}}
-        </ul>
+        <div class="row">
+            {{>addChallenge}}
+        </div>
+        <div class="row">
+            <ul>
+                {{#each challenges}}
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control editChallenge" value="{{name}}">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Action <span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <li><a href="#" class="removeChallenge">Remove</a></li>
+                                    <li><a href="{{pathFor 'challenge' _id}}">Go edit</a></li>
+                                </ul>
+                            </div><!-- /btn-group -->
+                        </div>
+                    </div>
+                {{/each}}
+            </ul>
+        </div>
+
     </div>
 </template>

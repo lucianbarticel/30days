@@ -1,6 +1,12 @@
 <template name="addChallenge">
     <form name="addChalenge" method="POST" action="">
-        <input name="name" type="text" placeholder="challenge name" value=""/>
-        <button type="submit">Submit</button>
+        <div class="col-md-12">
+            <div class="input-group">
+                <input name="name" type="text" class="form-control" placeholder="challenge name" value=""/>
+             <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">Submit</button>
+             </span>
+            </div>
+        </div>
     </form>
 </template>

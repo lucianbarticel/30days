@@ -26,3 +26,18 @@ AboutController = RouteController.extend({
         });
     }
 });
+
+Router.route('/challenge/:_id', {name: "challenge", controller: 'ChallengeController'});
+
+ChallengeController = RouteController.extend({
+    waitOn: function(){
+        return Meteor.subscribe("singleChallenge", this.params._id);
+    },
+    action: function(){
+        this.render('singleChallenge',{
+            data: function(){
+                return Challenges.findOne({_id: this.params._id});
+            }
+        });
+    }
+})
