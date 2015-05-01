@@ -54,7 +54,7 @@ Meteor.methods({
             return false;
         var starDate = challenge.startedAt;
         if(!starDate)
-            return "not started yet";
+            return false;
         var challengeRoutines = [];
         for(var i=0; i<30; i++){
             var routine = new Object();
@@ -62,10 +62,18 @@ Meteor.methods({
             var thisDate = new Date();
             thisDate.setDate(challenge.startedAt.getDate() + i);
             routine.date = thisDate;
-            //get routines activity
-            routine.activity = Routines.findOne({challenge: challengeId, createdAt: thisDate}) || "no activity";
+            routine.challengeId = challengeId;
             challengeRoutines.push(routine);
         }
         return challengeRoutines;
+    },
+    'get_routine_activity': function(challengeId, createdAt){
+        check(challengeId, String);
+        var challenge = Challenges.findOne(challengeId);
+        if(!challenge || this.userId !== challenge.createdBy)
+            return false;
+        if(!createdAt)
+            return false;
+        return Routines.findOne({challenge: challengeId, createdAt: createdAt}) || "no activity";
     }
 })

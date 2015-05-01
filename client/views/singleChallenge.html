@@ -14,21 +14,15 @@
                 </p>
             {{/if}}
         </div>
-        {{#if startedAt}}
         <div class="jumbotron">
-            {{#each routines}}
-                    <p>{{formatDate date "short"}} --- {{activity}}</p>
-                {{/each}}
-        </div>
-        {{/if}}
-        <div class="jumbotron">
+            <h3>Details</h3>
             <p>
             Started at: 
-            {{#if startedAt }}
-                {{formatDate startedAt "long"}}
-            {{else}}
-                not yet started
-            {{/if}}
+                {{#if startedAt }}
+                    {{formatDate startedAt "long"}}
+                {{else}}
+                    not yet started
+                {{/if}}
             </p>
             <p>Created at : {{formatDate createdAt "long"}}</p>
             <p>Created by: {{creatorEmail}}</p>
@@ -36,10 +30,42 @@
                 <p>Private: <input type="checkbox" id="isPrivate" checked="{{isPrivate}}" /></p>
             {{/if}}
         </div>
+        {{#if startedAt}}
+        <div class="jumbotron">
+            <h3>Add activity</h3>
+            {{#each routines}}
+                <button type="button" class="btn btn-default addRoutine" data-toggle="modal" data-target="#activityModal">{{formatDate date "short"}}</button>
+            {{/each}}
+        </div>
+        {{/if}}
     	{{#if currentUser}}
-    		{{>listSteps steps=steps challenge=_id }}            
+            {{#unless startedAt}}
+    		  {{>listSteps steps=steps challenge=_id }}            
+            {{/unless}}
     	{{else}}
     		You have to log in in order to see the steps
     	{{/if}}
+    </div>
+        
+    <div class="modal fade" id="activityModal">
+          <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add Activity for {{formatDate currentDate "short"}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{currentActivity}}
+                        {{#each steps}}
+                            <br/>
+                            <input type="checkbox" />{{body}}
+                        {{/each}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary saveActivity">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
     </div>
 </template>
