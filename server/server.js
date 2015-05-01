@@ -33,3 +33,9 @@ Meteor.publish("singleChallenge", function(challengeId){
 Meteor.publish("steps", function(){
     return Steps.find({createdBy: this.userId});
 })
+
+Meteor.methods({
+    'get_user_email': function(id){
+        return Meteor.users.findOne({_id: id}).emails[0].address;
+    }
+})

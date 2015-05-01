@@ -3,11 +3,30 @@
         <div class="jumbotron">
         {{#linkTo route="home"}}GoHome{{/linkTo}}
             <h2>{{name}}</h2>
-            {{>loginButtons}}
-
+            <p>{{>loginButtons}}</p>
+            {{#if currentUser}}
+                <p>
+                {{#if startedAt}}
+                    <button class="btn btn-default" id="startChallenge" type="submit" disabled="disabled">Start challenge!</button>
+                {{else}}
+                    <button class="btn btn-default" id="startChallenge" type="submit">Start challenge!</button>
+                {{/if}}
+                </p>
+            {{/if}}
+        </div>
+        <div class="jumbotron">
+            <p>
+            Started at: 
+            {{#if startedAt }}
+                {{startedAt}}
+            {{else}}
+                not yet started
+            {{/if}}
+            </p>
+            <p>Created at : {{createdAt}}</p>
+            <p>Created by: {{creatorEmail}}</p>
         </div>
     	{{#if currentUser}}
-            {{_id}}
     		{{>listSteps steps=steps challenge=_id }}            
     	{{else}}
     		You have to log in in order to see the steps
