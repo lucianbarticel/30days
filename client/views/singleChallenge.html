@@ -14,17 +14,27 @@
                 </p>
             {{/if}}
         </div>
+        {{#if startedAt}}
+        <div class="jumbotron">
+            {{#each routines}}
+                    <p>{{formatDate date "short"}} --- {{activity}}</p>
+                {{/each}}
+        </div>
+        {{/if}}
         <div class="jumbotron">
             <p>
             Started at: 
             {{#if startedAt }}
-                {{startedAt}}
+                {{formatDate startedAt "long"}}
             {{else}}
                 not yet started
             {{/if}}
             </p>
-            <p>Created at : {{createdAt}}</p>
+            <p>Created at : {{formatDate createdAt "long"}}</p>
             <p>Created by: {{creatorEmail}}</p>
+            {{#if currentUser}}
+                <p>Private: <input type="checkbox" id="isPrivate" checked="{{isPrivate}}" /></p>
+            {{/if}}
         </div>
     	{{#if currentUser}}
     		{{>listSteps steps=steps challenge=_id }}            

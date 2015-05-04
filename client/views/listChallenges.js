@@ -12,10 +12,9 @@ Template.listChallenges.helpers({
 
 Template.listChallenges.events({
     'click .removeChallenge': function(event, template){
-        Challenges.remove(this._id);
+        Meteor.call('remove_challenge', this._id);
     },
     'keyup .editChallenge': function(event, template){
-        console.log(event.target.value);
         Challenges.update(this._id, {$set: {name: event.target.value}});
     }
 })

@@ -5,5 +5,6 @@ Template.addChallenge.events({
         var _userId = Meteor.userId();
         var challenge = {createdBy: _userId, createdAt: new Date(), name: _name };
         Challenges.insert(challenge);
+        event.target.name.value = "";
     }
 });

@@ -6,5 +6,6 @@ Template.addStep.events({
         var _challenge = event.target.challenge.value;
         var step = {createdBy: _userId, createdAt: new Date(), body: _body, challenge:_challenge };
         Steps.insert(step);
+        event.target.body.value = "";
     }
 })
