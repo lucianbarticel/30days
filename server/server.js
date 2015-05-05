@@ -22,6 +22,15 @@ Steps.allow({
     }
 })
 
+Routines.allow({
+    insert: function (userId, doc) {
+        return doc.createdBy == userId;
+    },
+    update: function(userId, doc){
+        return doc.createdBy == userId;
+    }
+})
+
 Meteor.publish("challenges", function () {
     return Challenges.find({ createdBy: this.userId });
 });
@@ -56,6 +65,9 @@ Meteor.methods({
         if(!starDate)
             return false;
         var challengeRoutines = [];
+        var currentDate = new Date(); 
+        var minDate = new Date();
+        minDate.setDate(currentDate.getDate() -3 );
         for(var i=0; i<30; i++){
             var routine = new Object();
             //get routines date
@@ -63,6 +75,7 @@ Meteor.methods({
             thisDate.setDate(challenge.startedAt.getDate() + i);
             routine.date = thisDate;
             routine.challengeId = challengeId;
+            routine.disabled = thisDate <= currentDate && thisDate >= minDate ? '' : 'disabled';
             challengeRoutines.push(routine);
         }
         return challengeRoutines;
@@ -74,6 +87,20 @@ Meteor.methods({
             return false;
         if(!createdAt)
             return false;
-        return Routines.findOne({challenge: challengeId, createdAt: createdAt}) || "no activity";
+        var activity = [];
+        var steps = Steps.find({challenge:challengeId}).fetch();
+        if(steps.length){
+            for(var step in steps){
+                var activityStep = new Object();
+                activityStep.stepId = steps[step]._id;
+                activityStep.body = steps[step].body;
+                var routine = Routines.findOne({stepId: steps[step]._id, stepDate: createdAt});
+                activityStep.checked = routine ? routine.checked : false;
+                activityStep.challengeId = challengeId;
+                activity.push(activityStep);
+            }
+        }
+
+        return activity;
     }
 })

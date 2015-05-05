@@ -25,7 +25,7 @@ Template.singleChallenge.helpers({
 	currentDate: function(){
 		return Session.get('currentActivityDate');
 	},
-	currentActivity: function(){
+	activity: function(){
 		return Session.get('currentActivity');
 	}
 });
@@ -33,6 +33,9 @@ Template.singleChallenge.helpers({
 Template.singleChallenge.events({
 	'click #startChallenge': function(){
 		Challenges.update({_id: this._id}, {$set: {startedAt: new Date()}})
+		Meteor.call("get_challenge_routines", this._id, function(error, result){
+			Session.set('challengeRoutines', result);
+		});
 	},
 	'change #isPrivate': function(){
 		if(this.isPrivate){
@@ -44,6 +47,17 @@ Template.singleChallenge.events({
 	'click .addRoutine': function(){
 		Session.set('currentActivityDate', this.date);
 		Meteor.call("get_routine_activity", this.challengeId, this.date, function(error, result){
+			Session.set('currentActivity', result);
+		});
+	},
+	'change .activitySteps': function(){
+		var _userId = Meteor.userId();
+		var _stepDate =  Session.get('currentActivityDate');
+		var _stepId = this.stepId;
+		var _checked = !this.checked;
+		var routine = {createdBy: _userId, stepDate: _stepDate, stepId: _stepId, checked:_checked };
+		Routines.insert(routine);
+		Meteor.call("get_routine_activity", this.challengeId, _stepDate, function(error, result){
 			Session.set('currentActivity', result);
 		});
 	}

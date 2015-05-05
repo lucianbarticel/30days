@@ -30,14 +30,16 @@
                 <p>Private: <input type="checkbox" id="isPrivate" checked="{{isPrivate}}" /></p>
             {{/if}}
         </div>
+        
         {{#if startedAt}}
         <div class="jumbotron">
             <h3>Add activity</h3>
             {{#each routines}}
-                <button type="button" class="btn btn-default addRoutine" data-toggle="modal" data-target="#activityModal">{{formatDate date "short"}}</button>
+                <button type="button" class="btn btn-default addRoutine" data-toggle="modal" data-target="#activityModal" {{disabled}}>{{formatDate date "short"}}</button>
             {{/each}}
         </div>
         {{/if}}
+
     	{{#if currentUser}}
             {{#unless startedAt}}
     		  {{>listSteps steps=steps challenge=_id }}            
@@ -45,8 +47,8 @@
     	{{else}}
     		You have to log in in order to see the steps
     	{{/if}}
+
     </div>
-        
     <div class="modal fade" id="activityModal">
           <div class="modal-dialog">
                 <div class="modal-content">
@@ -55,10 +57,14 @@
                         <h4 class="modal-title">Add Activity for {{formatDate currentDate "short"}}</h4>
                     </div>
                     <div class="modal-body">
-                        {{currentActivity}}
-                        {{#each steps}}
-                            <br/>
-                            <input type="checkbox" />{{body}}
+                        {{#each activity}}
+                            {{#if checked}}
+                                {{body}}
+                            {{else}}
+                                <input type="checkbox" class="activitySteps" value="{{stepId}}" /> {{body}}<br/>
+                            {{/if}}
+                        {{else}}
+                            no steps defined
                         {{/each}}
                     </div>
                     <div class="modal-footer">
@@ -67,5 +73,5 @@
                     </div>
                 </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
-    </div>
+    </div>   
 </template>
