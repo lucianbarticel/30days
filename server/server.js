@@ -43,6 +43,10 @@ Meteor.publish("steps", function(){
     return Steps.find({createdBy: this.userId});
 })
 
+Meteor.publish("routines", function(){
+    return Routines.find({createdBy: this.userId});
+})
+
 Meteor.methods({
     'get_user_email': function(id){
         return Meteor.users.findOne({_id: id}).emails[0].address;
@@ -67,7 +71,7 @@ Meteor.methods({
         var challengeRoutines = [];
         var currentDate = new Date(); 
         var minDate = new Date();
-        minDate.setDate(currentDate.getDate() -3 );
+        minDate.setDate(currentDate.getDate() -6 );
         for(var i=0; i<30; i++){
             var routine = new Object();
             //get routines date
@@ -81,6 +85,8 @@ Meteor.methods({
         return challengeRoutines;
     },
     'get_routine_activity': function(challengeId, createdAt){
+        var createdAtNew = new Date(createdAt.getMonth() + "/" + createdAt.getDate() + "/" + createdAt.getFullYear()) 
+        var createdAtTomorrow = new Date(createdAt.getMonth() + "/" + (createdAt.getDate() +1) + "/" + createdAt.getFullYear()) 
         check(challengeId, String);
         var challenge = Challenges.findOne(challengeId);
         if(!challenge || this.userId !== challenge.createdBy)
@@ -94,7 +100,8 @@ Meteor.methods({
                 var activityStep = new Object();
                 activityStep.stepId = steps[step]._id;
                 activityStep.body = steps[step].body;
-                var routine = Routines.findOne({stepId: steps[step]._id, stepDate: createdAt});
+                console.log(Routines.find({stepId: steps[step]._id, stepDate: {$gte: ISODate(createdAtNew), $lt: ISODate(createdAtTomorrow)}}).fetch());
+                var routine = Routines.findOne({stepId: steps[step]._id, stepDate: createdAt});  
                 activityStep.checked = routine ? routine.checked : false;
                 activityStep.challengeId = challengeId;
                 activity.push(activityStep);

@@ -4,6 +4,7 @@
 
 Template.singleChallenge.rendered = function(){
 	Meteor.subscribe("steps");
+	Meteor.subscribe("routines");
 	Meteor.call("get_user_email", this.data.createdBy, function(error, result){
 		Session.set('thisUserEmail', result);
 	});
@@ -53,12 +54,17 @@ Template.singleChallenge.events({
 	'change .activitySteps': function(){
 		var _userId = Meteor.userId();
 		var _stepDate =  Session.get('currentActivityDate');
+		console.log(_stepDate);
 		var _stepId = this.stepId;
 		var _checked = !this.checked;
 		var routine = {createdBy: _userId, stepDate: _stepDate, stepId: _stepId, checked:_checked };
-		Routines.insert(routine);
-		Meteor.call("get_routine_activity", this.challengeId, _stepDate, function(error, result){
-			Session.set('currentActivity', result);
-		});
+		Routines.insert(routine, function(error, result){
+			if(error)
+				console.log("error "+error);
+		});	
+		
+	},
+	'click .closeAddActivity': function(){
+		//Session.set('currentActivity', []);
 	}
 });

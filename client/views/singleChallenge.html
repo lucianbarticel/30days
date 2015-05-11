@@ -34,8 +34,9 @@
         {{#if startedAt}}
         <div class="jumbotron">
             <h3>Add activity</h3>
-            {{#each routines}}
-                <button type="button" class="btn btn-default addRoutine" data-toggle="modal" data-target="#activityModal" {{disabled}}>{{formatDate date "short"}}</button>
+            {{#each routines}}                
+                <button type="button" class="btn btn-default addRoutine" data-toggle="modal" data-target="#activityModal" {{disabled}}>
+                {{formatDate date "short"}}</button>                
             {{/each}}
         </div>
         {{/if}}
@@ -68,8 +69,7 @@
                         {{/each}}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary saveActivity">Save changes</button>
+                        <button type="button" class="btn btn-default closeAddActivity" data-dismiss="modal">Close</button>
                     </div>
                 </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
