@@ -59,11 +59,7 @@
                     </div>
                     <div class="modal-body">
                         {{#each activity}}
-                            {{#if checked}}
-                                {{body}}
-                            {{else}}
-                                <input type="checkbox" class="activitySteps" value="{{stepId}}" /> {{body}}<br/>
-                            {{/if}}
+                                <input type="checkbox" class="activitySteps" value="{{stepId}}" /> {{body}} {{#if checked }}{{checked}}{{/if}}<br/>
                         {{else}}
                             no steps defined
                         {{/each}}

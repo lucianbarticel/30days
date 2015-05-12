@@ -54,14 +54,8 @@ Template.singleChallenge.events({
 	'change .activitySteps': function(){
 		var _userId = Meteor.userId();
 		var _stepDate =  Session.get('currentActivityDate');
-		console.log(_stepDate);
 		var _stepId = this.stepId;
-		var _checked = !this.checked;
-		var routine = {createdBy: _userId, stepDate: _stepDate, stepId: _stepId, checked:_checked };
-		Routines.insert(routine, function(error, result){
-			if(error)
-				console.log("error "+error);
-		});	
+		Meteor.call("set_step_activity", _userId, _stepDate, _stepId);
 		
 	},
 	'click .closeAddActivity': function(){

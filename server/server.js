@@ -71,7 +71,7 @@ Meteor.methods({
         var challengeRoutines = [];
         var currentDate = new Date(); 
         var minDate = new Date();
-        minDate.setDate(currentDate.getDate() -6 );
+        minDate.setDate(currentDate.getDate() -12 );
         for(var i=0; i<30; i++){
             var routine = new Object();
             //get routines date
@@ -85,8 +85,6 @@ Meteor.methods({
         return challengeRoutines;
     },
     'get_routine_activity': function(challengeId, createdAt){
-        var createdAtNew = new Date(createdAt.getMonth() + "/" + createdAt.getDate() + "/" + createdAt.getFullYear()) 
-        var createdAtTomorrow = new Date(createdAt.getMonth() + "/" + (createdAt.getDate() +1) + "/" + createdAt.getFullYear()) 
         check(challengeId, String);
         var challenge = Challenges.findOne(challengeId);
         if(!challenge || this.userId !== challenge.createdBy)
@@ -98,16 +96,38 @@ Meteor.methods({
         if(steps.length){
             for(var step in steps){
                 var activityStep = new Object();
+                var stepActivity = get_step_activity(steps[step]._id, createdAt);
                 activityStep.stepId = steps[step]._id;
                 activityStep.body = steps[step].body;
-                console.log(Routines.find({stepId: steps[step]._id, stepDate: {$gte: ISODate(createdAtNew), $lt: ISODate(createdAtTomorrow)}}).fetch());
-                var routine = Routines.findOne({stepId: steps[step]._id, stepDate: createdAt});  
-                activityStep.checked = routine ? routine.checked : false;
+                activityStep.checked = stepActivity ? true : false;
                 activityStep.challengeId = challengeId;
                 activity.push(activityStep);
             }
         }
-
         return activity;
+    },
+    'set_step_activity': function(_userId, _stepDate, _stepId){
+        //check if there is any activity for this step on this date
+        var stepActivity = get_step_activity(_stepId, _stepDate);
+        if (!stepActivity){
+            var routine = {createdBy: _userId, stepDate: _stepDate, stepId: _stepId, checked: true };
+            Routines.insert(routine, function(err, records){
+                console.log("new routine added");
+            });
+        }else{
+            //make sure this works!!
+            Routines.update(stepActivity._id, {$set: {checked: stepActivity.checked}}, function(err, records){
+                console.log("new routine updated");
+            });
+        }
+
     }
 })
+
+function get_step_activity (stepId, stepDate){
+    var createdAtNew = new Date(stepDate.getFullYear()+"-"+(stepDate.getMonth()+1)+"-"+stepDate.getDate());
+    var createdAtTomorrow = new Date(stepDate.getFullYear()+"-"+(stepDate.getMonth()+1)+"-"+(stepDate.getDate()+1));
+    var activity = Routines.findOne({stepId: stepId, stepDate: {$gte: createdAtNew, $lt: createdAtTomorrow}}) || false;
+
+    return activity;
+}
